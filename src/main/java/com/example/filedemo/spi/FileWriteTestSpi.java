@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,8 +37,7 @@ public class FileWriteTestSpi {
     @ResponseBody
     @ApiOperation("jjjj")
     @RequestMapping
-    public List<String> download(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<String> returnList = new ArrayList<>();
+    public String download(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // 数据
         List<TestDto> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -56,8 +54,7 @@ public class FileWriteTestSpi {
                     .build());
         }
         sendExcel(list, response);
-        returnList.add("chenggong");
-        return returnList;
+        return "完成";
     }
 
     public void sendExcel(List<TestDto> list, HttpServletResponse response) throws IOException, ServletException {
@@ -87,11 +84,10 @@ public class FileWriteTestSpi {
         try {
             //文件路径：  SaleAppointmentSendEmail/日期/
             String datePath = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String filePath = "SaleAppointmentSendEmail/" + datePath + "/";
-            String path = "/exportexcel/test/" + filePath;
+            String path = "/exportexcel/test/";
 
             isChartPathExist(path);
-            //文件名：仓库/承运商 + 日期.xlsx
+            //文件
             FileOutputStream fos = new FileOutputStream(path + "key-" + datePath + ".xlsx");
 
             wb.write(fos);
@@ -101,32 +97,6 @@ public class FileWriteTestSpi {
             e.printStackTrace();
             wb.close();
         }
-
-//        //doGet(response);
-//        //获取文件
-//        try{
-//            jxl.Workbook excelWb =null;
-//            InputStream is = new FileInputStream("/test/SaleAppointmentSendEmail/20200407/仓库、承运商20200407.xlsx");
-//            excelWb = Workbook.getWorkbook(is);
-//
-//            int sheetSize = excelWb.getNumberOfSheets();
-//            Sheet sheet = excelWb.getSheet(0);
-//            int row_total = sheet.getRows();
-//            for (int j = 0; j < row_total; j++) {
-//                if(j == 0){
-//                    Cell[] cells = sheet.getRow(j);
-//
-//                    System.out.println(cells[0].getContents());
-//                    System.out.println(cells[1].getContents());
-//                    System.out.println(cells[2].getContents());
-//                }
-//            }
-//        }catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (BiffException e){
-//            e.printStackTrace();
-//        }
 
     }
 
